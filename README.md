@@ -36,7 +36,7 @@
 
 find the keyword ```DATABASES```and change the user and password fields inside to your own
   
-## 4.Switch int the Blog folder which including the manage.py file
+## 4.Switch to the Blog folder which including the manage.py file
 
 **Enter the following commands in your terminal**
 
