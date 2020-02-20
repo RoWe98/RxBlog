@@ -1,0 +1,68 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>找回密码</title>
+     <link href="{% static 'css/register.css' %}" rel="stylesheet">
+    <style>
+        button{
+            margin-left: 120px;
+		    height:  30px;
+		    width: 100px;
+	    }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/1.8.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="main">
+        <div class="login-form">
+            <h1><span>找回密码</span></h1>
+            <div class="head">
+                <img src="{% static 'images/user.png' %}" alt="" />
+            </div>
+            <p style="margin-left: 70px">{{ msg }}</p>
+            <form action="{% url 'app:forger_pwd' %}" method="post"> {% csrf_token %}
+                {{ form.email }}<br>
+                {{ form.captcha }}
+                <div>
+                   <input type="submit" value="找回密码" name="login">
+                </div>
+                <a href="{% url 'app:login' %}">返回登陆</a>
+            </form>
+        </div>
+</div>
+<!--Ajax刷新图片-->
+<script>
+    $(function () {
+        //刷新事件
+       $('.captcha').click(function () {
+           let image = $(this);
+           $.getJSON('/captcha/refresh', function (data) {
+               console.log(data);
+               image.attr('src',data['image_url']);
+               $('#id_captcha_0').val(data['key'])
+           })
+       });
+       
+       //验证码是否正确
+       $('#id_captcha_1').blur(function () {
+           let key = $('#id_captcha_0').val();
+           let code = $(this).val();
+           let $this = $(this)
+
+           $.getJSON('{% url 'app:valide_pwd' %}',{key:key,code:code},function (data) {
+               console.log(data);
+               $('#result').remove();
+               if(data.status==1){
+                   $this.after("<span id='result'>验证码正确</span>")
+               }else{
+                   $this.after("<span id='result'>验证码错误</span>")
+               }
+           })
+       })
+    });
+</script>
+
+</body>
+</html>

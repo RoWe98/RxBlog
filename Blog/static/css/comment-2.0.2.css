@@ -1,0 +1,46 @@
+/*璇勮妗�*/
+.comment_text{ width: 100%; height: 9em; overflow-y: visible;}
+.comment_button{ margin-top:0.5em; float: right;}
+.comment_button #reset_btn{ margin-right:1em;}
+
+/*璇勮鍒楄〃*/
+.comment_obj{  overflow: hidden; padding-bottom: 0.5em; border-bottom: 1px #ddd solid; margin-top: 1.5em;}
+#comments_list :last-child{ border-bottom: none;}
+
+/*澶村儚*/
+.comment_obj .comment_user{ width: 70px; text-align: center; float: left;}
+.comment_obj .user_avatar{ border-radius: 6px; width: 64px; height: 64px;}
+.comment_obj .uesr_name{ font-size: 70%; margin-top: 0.5em; word-break:break-all; font-weight: bolder;}
+
+/*璇勮*/
+.comment_obj .comment_body{ margin-left: 80px;}
+.comment_obj .comment_content{ min-height: 64px; padding: 0.2em; border-radius: 6px;}
+.comment_obj .comment_bottom{ text-align: right; padding-right: 0.3em; }
+.comment_obj .comment_bottom span{ color: #aaa;}
+
+/*鍥炲*/
+.comment_obj .comment_reply{ border-top: 1px #ddd dashed; padding-top: 0.2em;}
+.comment_obj .reply_avatar{ width: 32px; height: 32px; border-radius: 4px; float: left; margin-top:4px;}
+.comment_obj .reply_body{ margin-left: 40px;}
+.comment_obj .reply_body p{ margin: 0;}
+.comment_obj .reply_body .comment_bottom{ padding-top: 0.5em;}
+.comment_obj .reply_name{ font-weight: bolder;}
+.comment_obj .comment_reply li{  padding-top: 0.7em; padding-bottom: 0.5em; border-bottom: 1px #ddd dashed;}
+
+/*鍏朵粬*/
+.comment_title_btn{ float: right; position: relative; top: -36px;}
+#reply_text_pre{ border-top: 1px #ccc dashed; padding: 0.5em 1em; color: #777;}
+#tip_text{ margin-right: 1em; font-weight: bolder; color: #d9534f;}
+.emojione{
+    font-size: inherit;
+    height: 2ex;
+    width: 2.1ex;
+    min-height: 20px;
+    min-width: 20px;
+    display: inline-block;
+    margin: -.2ex .15em .2ex;
+    line-height: normal;
+    vertical-align: middle;
+    max-width: 100%;
+    top: 0;
+}

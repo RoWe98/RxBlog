@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pagination_tags %}
+{% block content %}
+<aside>
+    <div class="l_box" id="stickMe">
+      <div class="about_me">
+        <h2>关于我</h2>
+        <ul>
+          <i><img src="http://qiniusave.luoshaoqi.cn/{{ icon }}"></i>
+          <p><b>Rex</b>&nbsp;{{ site_desc }}</p>
+        </ul>
+      </div>
+
+      <div class="search">
+        <form action="{% url 'app:search'%}" method="post" name="searchform" id="searchform">
+          <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+          <input name="show" value="title" type="hidden">
+          <input name="tempid" value="1" type="hidden">
+          <input name="tbname" value="news" type="hidden">
+          <input name="Submit" class="input_submit" value="搜索" type="submit">
+        </form>
+      </div>
+      <div class="fenlei">
+        <h2>文章分类</h2>
+        <ul>
+          {% for category,num in categories_dict.items %}
+                     <li><a href="{% url 'app:article_list' category%}">{{ category }}({{ num }})</a></li>
+          {% endfor %}
+
+        </ul>
+      </div>
+      <div class="tuijian">
+        <h2>站长推荐</h2>
+        <ul>
+          <li><a href="/">test1</a></li>
+          <li><a href="/">test2</a></li>
+          <li><a href="/">test3</a></li>
+          <li><a href="/">test4</a></li>
+          <li><a href="/">test5</a></li>
+          <li><a href="/">test6</a></li>
+          <li><a href="/">test7</a></li>
+          <li><a href="/">test8</a></li>
+        </ul>
+      </div>
+      <div class="links">
+        <h2>友情链接</h2>
+        <ul>
+          {% for friends_addr in friends_addr_list %}
+            <li><a href="{{ friends_addr }}">{{ friends_addr }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="guanzhu">
+        <h2>My Github</h2>
+        <ul>
+          <a href="{{ github_addr }}">站长的Github</a>
+        </ul>
+      </div>
+    </div>
+  </aside>
+  <div class="r_box">{% autopaginate articles 3 as articles_page %}
+    {% for article in articles_page %}
+        <li><i><a href="{% url 'app:post' article.id%}"><img src="http://qiniusave.luoshaoqi.cn/{{ article.image }}"></a></i>
+            <h3><a href="{% url 'app:post' article.id%}">{{ article.title }}</a> </h3>
+            <p>{{ article.desc }}</p>
+        </li>
+    {% endfor %}
+    {% paginate %}
+{#    <li><i><a href="/"><img src="{% static 'images/1.jpg' %}"></a></i>#}
+{#      <h3><a href="/">test1</a></h3>#}
+{#      <p>test_desc</p>#}
+{#    </li>#}
+{#    <li><i><a href="/"><img src="{% static 'images/1.jpg' %}"></a></i>#}
+{#      <h3><a href="/">test2</a></h3>#}
+{#      <p>test_desc</p>#}
+{#    </li>#}
+{#    <li><i><a href="/"><img src="{% static 'images/1.jpg' %}"></a></a></i>#}
+{#      <h3><a href="/">test3</a></h3>#}
+{#      <p>test_desc</p>#}
+{#    </li>#}
+{#    <li><i><a href="/"><img src="{% static 'images/1.jpg' %}"></a></a></i>#}
+{#      <h3><a href="/">test4</a></h3>#}
+{#      <p>test_desc</p>#}
+{#    </li>#}
+{#    <li>#}
+{#      <h3><a href="/">test5</a></h3>#}
+{#      <p>还在为浪漫的求婚词而烦恼不知道该怎么说吗？女孩子都有着浪漫的小情怀，对于求婚更是抱着满满的浪漫期待，也希望在求婚那一天对方可以给自己一个最浪漫的求婚词。</p>#}
+{#    </li>#}
+{#    <li><i><a href="/"><img src="{% static 'images/1.jpg' %}"></a></i>#}
+{#      <h3><a href="/">test6</a></h3>#}
+{#      <p>《擦肩而过》文/清河鱼 编绘/天朝羽打开一扇窗，我不曾把你想得平常。看季节一一过往。你停留的那个地方，是否依然花儿开放？在夜里守靠着梦中的，想那仿佛前世铭刻进心肠的</p>#}
+{#    </li>#}
+{#    <li><i><a href="/"><img src="{% static 'images/6.jpg' %}"></a></i>#}
+{#      <h3><a href="/">女孩都有浪漫的小情怀——浪漫的求婚词</a></h3>#}
+{#      <p>还在为浪漫的求婚词而烦恼不知道该怎么说吗？女孩子都有着浪漫的小情怀，对于求婚更是抱着满满的浪漫期待，也希望在求婚那一天对方可以给自己一个最浪漫的求婚词。</p>#}
+{#    </li>#}
+
+  </div>
+{% endblock %}
+
+

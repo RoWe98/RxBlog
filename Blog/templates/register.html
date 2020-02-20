@@ -1,0 +1,55 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+     <link href="{% static 'css/register.css' %}" rel="stylesheet">
+    <style>
+        button{
+            margin-left: 120px;
+		    height:  30px;
+		    width: 100px;
+	    }
+    </style>
+</head>
+<body>
+<div class="main">
+        <div class="login-form">
+            <h1>博客系统注册</h1>
+            <div class="head">
+                <img src="{% static 'images/user.png' %}" alt="" />
+            </div>
+            <p>{{ msg }}</p>
+            <form action="{% url 'app:register' %}" method="post"> {% csrf_token %}
+                <input placeholder="用户名" name="username" type="text" required="">
+                <input placeholder="邮箱" name="email" type="text" required="">
+                <input placeholder="手机号码" name="mobile" type="text" required="">
+                <input placeholder="密码" name="password" type="password" id="password1" required="">
+                <input placeholder="确认密码" name="Password" type="password" id="password2" required="">
+                <input placeholder="Github地址" name="github_addr" type="text" required="">
+                <div>
+                   <input type="submit" value="提交注册" name="login">
+                </div>
+            </form>
+        </div>
+</div>
+<script>
+    window.onload = function () {
+        document.getElementById("password1").onchange = validatePassword;
+        document.getElementById("password2").onchange = validatePassword;
+    }
+    
+    function validatePassword() {
+        let pass2 = document.getElementById("password2").value;
+        let pass1 = document.getElementById("password1").value;
+        if(pass1 != pass2){
+            document.getElementById("password2").setCustomValidity("密码不匹配");
+        }
+        else{
+            document.getElementById("password2").setCustomValidity('');
+        }
+    }
+</script>
+</body>
+</html>

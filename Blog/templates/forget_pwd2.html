@@ -1,0 +1,111 @@
+{% load staticfiles %}
+<html lang="zh_CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ForgetPassword</title>
+
+    <!-- Styling -->
+    <link href="https://fonts.loli.net/css?family=Open+Sans:300,400,600|Raleway:300,400,700" rel="stylesheet">
+    <link href="https://cdnjs.loli.net/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css?v=ec26bd"
+          rel="stylesheet">
+
+    <link href="{% static 'assert/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assert/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'assert/css/custom.css' %}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="{% static 'assert/js/main.min.js' %}"></script>
+    <script src="{% static 'assert/js/scripts.min.js' %}"></script>
+    <script src="{% static 'assert/js/clipboard.min.js' %}"></script>
+    <script src="{% static 'assert/js/lightslider.js' %}"></script>
+    <script src="{% static 'assert/js/select2.min.js' %}"></script>
+    <script src="{% static 'assert/js/dashboard.js' %}"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.8.3/jquery.min.js"></script>
+
+
+</head>
+
+<body class=" login" data-phone-cc-input="1">
+
+
+<div class="c-login c-login--horizontal">
+    <div class="c-login__content-wrapper">
+        <header class="c-login__head">
+            <h2 class="c-login__title">找回密码</h2>
+        </header>
+
+        <form method="post" action="{% url 'app:forger_pwd' %}" class="c-login__content" role="form">{% csrf_token %}
+            <div class="providerLinkingFeedback"></div>
+            <div class="c-field u-mb-small">
+                <label for="inputEmail" class="c-field__label">邮件地址</label>
+                {{ form.email }}
+            </div>
+
+            <div class="c-field u-mb-small">
+                <img src="{{ image_url }}" alt="captcha" class="captcha">
+                 <input required id="id_captcha_0" name="captcha_0" type="hidden" value="{{ hashkey }}">
+                <input autocomplete="off" name="captcha_1" required id="id_captcha_1" class="c-input" type="text" placeholder="验证码">
+            </div>
+
+            <button class="c-btn c-btn--success c-btn--fullwidth" type="submit">找回密码</button>
+
+            <span class="c-divider u-mv-small"></span>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <a href="{% url 'app:login' %}" class="c-btn c-btn--secondary c-btn--fullwidth">返回登陆</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="c-login__content-image">
+        <img src="{% static 'images/login-right-bg.png' %}" alt="Welcome to RxBlog">
+
+        <h3>RxBlog</h3>
+        <p class="u-text-large">专业的博客系统</p>
+    </div>
+</div>
+
+<!--Ajax刷新图片-->
+<script>
+    $(function () {
+        //刷新事件
+       $('.captcha').click(function () {
+           let image = $(this);
+           $.getJSON('/captcha/refresh', function (data) {
+               console.log(data);
+               image.attr('src',data['image_url']);
+               $('#id_captcha_0').val(data['key'])
+           })
+       });
+
+       //验证码是否正确
+       $('#id_captcha_1').blur(function () {
+           let key = $('#id_captcha_0').val();
+           let code = $(this).val();
+           let $this = $(this)
+
+           $.getJSON('{% url 'app:valide_pwd' %}',{key:key,code:code},function (data) {
+               console.log(data);
+               $('#result').remove();
+               if(data.status==1){
+                   $this.after("<span id='result'>验证码正确</span>")
+               }else{
+                   $this.after("<span id='result'>验证码错误</span>")
+               }
+           })
+       })
+    });
+</script>
+
+
+</body>
+</html>

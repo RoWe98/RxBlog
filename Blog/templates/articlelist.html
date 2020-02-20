@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<aside>
+    <div class="l_box" id="stickMe">
+
+
+      <div class="search">
+        <form action="{% url 'app:search'%}" method="post" name="searchform" id="searchform">
+          <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+          <input name="show" value="title" type="hidden">
+          <input name="tempid" value="1" type="hidden">
+          <input name="tbname" value="news" type="hidden">
+          <input name="Submit" class="input_submit" value="搜索" type="submit">
+        </form>
+      </div>
+
+      <div class="fenlei">
+        <h2>文章分类</h2>
+        <ul>
+          {% for category,num in categories_dict.items %}
+                     <li><a href="{% url 'app:article_list' category%}">{{ category }}({{ num }})</a></li>
+          {% endfor %}
+
+        </ul>
+      </div>
+
+      <div class="tuijian">
+        <h2>站长推荐</h2>
+        <ul>
+          <li><a href="/">你是什么人便会遇上什么人</a></li>
+          <li><a href="/">帝国cms 列表页调用子栏目，没有则不显示栏目名称</a></li>
+          <li><a href="/">第二届 优秀个人博客模板比赛参选活动</a></li>
+          <li><a href="/">个人博客模板《绅士》后台管理</a></li>
+          <li><a href="/">你是什么人便会遇上什么人</a></li>
+          <li><a href="/">帝国cms 列表页调用子栏目，没有则不显示栏目名称</a></li>
+          <li><a href="/">第二届 优秀个人博客模板比赛参选活动</a></li>
+          <li><a href="/">个人博客模板《绅士》后台管理</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </aside>
+  <div class="r_box">
+    {% for article in articles %}
+        <li><i><a href="{% url 'app:post' article.id%}"><img src="http://qiniusave.luoshaoqi.cn/{{ article.image }}"></a></i>
+            <h3><a href="{% url 'app:post' article.id%}">{{ article.title }}</a> </h3>
+            <p>{{ article.desc }}</p>
+        </li>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+
