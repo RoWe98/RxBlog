@@ -27,9 +27,9 @@
     
     create database myblog charset=utf8
     Switch into the extra forder and keyin
-    ```use myblog
-       source myblog.sql
-    ```
+    use myblog
+    source myblog.sql
+    
 
 ## 3.Edit the setting.py file
 
