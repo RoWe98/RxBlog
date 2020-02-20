@@ -5,6 +5,7 @@
 **1. Install the Anaconda3**
 
 - Install the Anaconda3 (We recommand to deploy on centos7 )
+
     wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-2.4.1-Linux-x86_64.sh
     bash Anaconda3-2.4.1-Linux-x86_64.sh 
   
