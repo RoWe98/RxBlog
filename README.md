@@ -34,7 +34,7 @@
 
 **Switch to the Blog folder and edit the settings.py file**
 
-**find the keyword ```DATABASES```and change the user and password fields inside to your own **
+find the keyword ```DATABASES```and change the user and password fields inside to your own
   
 ## 4.Switch int the Blog folder which including the manage.py file
 
