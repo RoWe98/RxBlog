@@ -24,8 +24,7 @@ from Blog import settings
 urlpatterns = [
     url(r'^xadmin/', include(xadmin.site.urls)),
     url(r'^app/', include('App.urls', namespace='app')),
-    # url(r'', index,name='index'),
-    url(r'$/', index),
+    url(r'^$', index,name='index'),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^article/', include('article.urls', namespace='article')),
     url(r'^mdeditor/', include('mdeditor.urls')),

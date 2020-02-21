@@ -304,6 +304,8 @@ def user_center(request, user_name):
 # render传入值：
 # 文章集合， 当前分类的文章， 分类字典（格式{‘分类名’：‘当前分类文章数’}）， 分类
 def post(request, article_id):
+    articles = Article.objects.all().order_by('-click_num')
+
     article = Article.objects.filter(pk=article_id).first()
     categories_article = Categories.objects.filter(article=article_id).first()
     print(article.content)
@@ -324,6 +326,7 @@ def post(request, article_id):
     categories_dict, categories = get_categories()
 
     context = {'article': article,
+               'articles': articles,
                'categories_article': categories_article,
                'categories_dict': categories_dict,
                'categories': categories,

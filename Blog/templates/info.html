@@ -1,23 +1,36 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load comments %}
+{% block myjs %}
+<script type="text/javascript" src="{% static 'js/hc-sticky.js' %}"></script>
+{% endblock %}
+{% block mycss %}
+    <style>
+        body {
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uAb9A.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uEIK0.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uVkPH.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uV6Q1.png');#}
+            {#background-size: 100% 100%;#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uZjnx.png')#}
+            background: url('https://s2.ax1x.com/2020/02/21/3uUIh9.png');
+        }
+    </style>
+{% endblock %}
 {% block content %}
     <article>
         <aside>
             <div class="l_box">
                 <div class="search">
-                    <form action="/e/search/index.php" method="post" name="searchform" id="searchform">
-                        <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词"
-                               style="color: rgb(153, 153, 153);"
-                               onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}"
-                               onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
-                        <input name="show" value="title" type="hidden">
-                        <input name="tempid" value="1" type="hidden">
-                        <input name="tbname" value="news" type="hidden">
-                        <input name="Submit" class="input_submit" value="搜索" type="submit">
+                    <form action="{% url 'app:search'%}" method="post" name="searchform" id="searchform">
+                      <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+                      <input name="show" value="title" type="hidden">
+                      <input name="tempid" value="1" type="hidden">
+                      <input name="tbname" value="news" type="hidden">
+                      <input name="Submit" class="input_submit" value="搜索" type="submit">
                     </form>
                 </div>
-                <div class="fenlei">
+                <div class="fenlei" style="background: rgb(255,255,255,0.9)">
                     <h2>文章分类</h2>
                     <ul>
                         {% for category,num in categories_dict.items %}
@@ -25,33 +38,15 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="tuijian">
-                    <h2>站长推荐</h2>
-                    <ul>
-                        <li><a href="/">你是什么人便会遇上什么人</a></li>
-                        <li><a href="/">帝国cms 列表页调用子栏目，没有则不显示栏目名称</a></li>
-                        <li><a href="/">第二届 优秀个人博客模板比赛参选活动</a></li>
-                        <li><a href="/">个人博客模板《绅士》后台管理</a></li>
-                        <li><a href="/">你是什么人便会遇上什么人</a></li>
-                        <li><a href="/">帝国cms 列表页调用子栏目，没有则不显示栏目名称</a></li>
-                        <li><a href="/">第二届 优秀个人博客模板比赛参选活动</a></li>
-                        <li><a href="/">个人博客模板《绅士》后台管理</a></li>
-                    </ul>
-                </div>
-                <div class="tuijian">
+                <div class="tuijian" style="background: rgb(255,255,255,0.9)">
                     <h2>点击排行</h2>
                     <ul>
-                        <li><a href="/">你是什么人便会遇上什么人</a></li>
-                        <li><a href="/">帝国cms 列表页调用子栏目，没有则不显示栏目名称</a></li>
-                        <li><a href="/">第二届 优秀个人博客模板比赛参选活动</a></li>
-                        <li><a href="/">个人博客模板《绅士》后台管理</a></li>
-                        <li><a href="/">你是什么人便会遇上什么人</a></li>
-                        <li><a href="/">帝国cms 列表页调用子栏目，没有则不显示栏目名称</a></li>
-                        <li><a href="/">第二届 优秀个人博客模板比赛参选活动</a></li>
-                        <li><a href="/">个人博客模板《绅士》后台管理</a></li>
+                        {% for article in articles %}
+                            <li><a href="{% url 'app:post' article.id %}">{{ article.title }}</a> </li>
+                        {% endfor %}
                     </ul>
                 </div>
-                <div class="cloud">
+                <div class="cloud" style="background: rgb(255,255,255,0.9)">
                     <h2>标签云</h2>
                     <ul>
                         <a href="/">陌上花开</a> <a href="/">校园生活</a> <a href="/">html5</a> <a href="/">SumSung</a> <a
@@ -59,15 +54,15 @@
                         <a href="/">华维荣耀</a> <a href="/">三星</a> <a href="/">索尼</a>
                     </ul>
                 </div>
-                <div class="guanzhu">
-                    <h2>关注我 么么哒</h2>
+                 <div class="guanzhu" style="background: rgb(255,255,255,0.9)">
+                    <h2>My Github</h2>
                     <ul>
-                        <img src="images/wx.jpg">
+                      <a href="{{ github_addr }}">站长的Github</a>
                     </ul>
-                </div>
+                 </div>
             </div>
         </aside>
-        <div class="infosbox">
+        <div class="infosbox" style="background: rgb(255,255,255,0.9)">
             <div class="newsview">
                 <h3 class="news_title">{{ article.title }}</h3>
                 <div class="bloginfo">

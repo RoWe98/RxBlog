@@ -1,10 +1,25 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load pagination_tags %}
+{% block mycss %}
+     <style>
+        body {
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uAb9A.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uEIK0.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uVkPH.png');111111#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uV6Q1.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uZjnx.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uMU1g.png');#}
+            background: url('https://s2.ax1x.com/2020/02/21/3uUIh9.png');
+            {#background-size: 50% 50%;#}
+
+        }
+    </style>
+{% endblock %}
 {% block content %}
 <aside>
     <div class="l_box" id="stickMe">
-      <div class="about_me">
+      <div class="about_me" style="background: rgb(255,255,255,0.9)">
         <h2>关于我</h2>
         <ul>
           <i><img src="http://qiniusave.luoshaoqi.cn/{{ icon }}"></i>
@@ -21,7 +36,7 @@
           <input name="Submit" class="input_submit" value="搜索" type="submit">
         </form>
       </div>
-      <div class="fenlei">
+      <div class="fenlei" style="background: rgb(255,255,255,0.9)">
         <h2>文章分类</h2>
         <ul>
           {% for category,num in categories_dict.items %}
@@ -30,20 +45,15 @@
 
         </ul>
       </div>
-      <div class="tuijian">
-        <h2>站长推荐</h2>
+      <div class="tuijian" style="background: rgb(255,255,255,0.9)">
+        <h2>点击排行</h2>
         <ul>
-          <li><a href="/">test1</a></li>
-          <li><a href="/">test2</a></li>
-          <li><a href="/">test3</a></li>
-          <li><a href="/">test4</a></li>
-          <li><a href="/">test5</a></li>
-          <li><a href="/">test6</a></li>
-          <li><a href="/">test7</a></li>
-          <li><a href="/">test8</a></li>
+          {% for article in articles %}
+            <li><a href="{% url 'app:post' article.id %}">{{ article.title }}</a> </li>
+          {% endfor %}
         </ul>
       </div>
-      <div class="links">
+      <div class="links" style="background: rgb(255,255,255,0.9)">
         <h2>友情链接</h2>
         <ul>
           {% for friends_addr in friends_addr_list %}
@@ -51,7 +61,7 @@
           {% endfor %}
         </ul>
       </div>
-      <div class="guanzhu">
+      <div class="guanzhu" style="background: rgb(255,255,255,0.9)">
         <h2>My Github</h2>
         <ul>
           <a href="{{ github_addr }}">站长的Github</a>
@@ -59,9 +69,10 @@
       </div>
     </div>
   </aside>
-  <div class="r_box">{% autopaginate articles 3 as articles_page %}
+
+  <div class="r_box" >{% autopaginate articles 3 as articles_page %}
     {% for article in articles_page %}
-        <li><i><a href="{% url 'app:post' article.id%}"><img src="http://qiniusave.luoshaoqi.cn/{{ article.image }}"></a></i>
+        <li style="background: rgb(255,255,255,0.9)"><i><a href="{% url 'app:post' article.id%}"><img src="http://qiniusave.luoshaoqi.cn/{{ article.image }}"></a></i>
             <h3><a href="{% url 'app:post' article.id%}">{{ article.title }}</a> </h3>
             <p>{{ article.desc }}</p>
         </li>
