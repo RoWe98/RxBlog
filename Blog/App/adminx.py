@@ -11,7 +11,7 @@ class BaseSettings(object):
 
 
 class GlobalSettings(object):
-    site_title = 'RxBlog后台管理'
+    site_title = 'RxBlog'
     site_footer = 'RoWe98 all rights reserved'
 
 

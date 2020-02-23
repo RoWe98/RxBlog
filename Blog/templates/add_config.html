@@ -1,0 +1,96 @@
+{% load staticfiles %}
+<html lang="zh_CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AddConfig</title>
+
+    <!-- Styling -->
+    <link href="https://fonts.loli.net/css?family=Open+Sans:300,400,600|Raleway:300,400,700" rel="stylesheet">
+    <link href="https://cdnjs.loli.net/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css?v=ec26bd"
+          rel="stylesheet">
+
+    <link href="{% static 'assert/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assert/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'assert/css/custom.css' %}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="{% static 'assert/js/main.min.js' %}"></script>
+    <script src="{% static 'assert/js/scripts.min.js' %}"></script>
+    <script src="{% static 'assert/js/clipboard.min.js' %}"></script>
+    <script src="{% static 'assert/js/lightslider.js' %}"></script>
+    <script src="{% static 'assert/js/select2.min.js' %}"></script>
+    <script src="{% static 'assert/js/dashboard.js' %}"></script>
+
+
+</head>
+
+<body class=" login" data-phone-cc-input="1">
+
+
+<div class="c-login c-login--horizontal">
+    <div class="c-login__content-wrapper">
+        <header class="c-login__head">
+            <h2 class="c-login__title">博客设置</h2>
+        </header>
+        <script>
+            if({{ msg }}){
+                alert({{ msg }})
+            }
+        </script>
+        <form method="post" action="{% url 'app:add_config' %}" class="c-login__content" role="form">{% csrf_token %}
+            <div class="providerLinkingFeedback"></div>
+            <div class="c-field u-mb-small">
+                <label for="inputUsername" class="c-field__label">文章分类</label>
+                <input class="c-input" type="text" name="categories" id="categories" placeholder="输入文章分类用;隔开" autofocus>
+            </div>
+
+            <div class="c-field u-mb-small">
+                <label for="inputEmail" class="c-field__label">博客简述</label>
+                <textarea class="c-input" type="text" name="desc"  placeholder="博客简述"
+                       autocomplete="off">
+                </textarea>
+            </div>
+
+            <div class="c-field u-mb-small">
+                <label for="inputMobile" class="c-field__label">友链</label>
+                <input class="c-input" type="text" name="friends_addr"  placeholder="输入友链用;隔开"
+                       autocomplete="off">
+            </div>
+
+            <div class="c-field u-mb-small">
+                <label for="inputPassword" class="c-field__label">Github地址</label>
+                <input class="c-input" type="text" id="github_addr" name="github_addr" placeholder="Github地址"
+                       autocomplete="off">
+            </div>
+
+            <button class="c-btn c-btn--success c-btn--fullwidth" type="submit">设置完成</button>
+
+            <span class="c-divider u-mv-small"></span>
+
+        </form>
+    </div>
+
+    <div class="c-login__content-image">
+        <img src="https://s2.ax1x.com/2020/02/07/1glrDg.png" alt="Welcome to RxBlog">
+
+        <h3>RxBlog</h3>
+        <p class="u-text-large">
+            超级用户添加成功！<br>
+            您需要做以下设置：<br>
+            1.博客文章分类添加<br>
+            2.博客简述介绍<br>
+            3.博客友链设置，默认为RxBlog的Github页面<br>
+            4.您的Github地址<br>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

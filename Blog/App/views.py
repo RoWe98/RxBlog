@@ -54,10 +54,16 @@ def get_categories():
 # 主页
 def index(request):
 
+    try:
+        user_admin = UserProfile.objects.get(is_superuser=1)
+    except Exception as e:
+        print("No Super User, Add one First")
+        return redirect('app:guide')
     # 从SiteConfig中获取友链和github地址以及图标和站点描述
     friends_addr_list, github_addr, icon, site_desc = get_config()
 
     # 按点击率从高到低排序
+
     articles = Article.objects.all().order_by('-click_num')
     # 获取文章数
     article_num = Article.objects.count()
@@ -66,24 +72,23 @@ def index(request):
     for i in range(10 - article_num):
         article_num_list.append('')
     print(articles)
-
     # 获取分类字典和分类 分类字典格式 {‘分类名’：‘当前分类文章数’}
     categories_dict, categories = get_categories()
-
     print(categories_dict)
     print(friends_addr_list)
     # render返回值
     # 文章集合； 文章数； 文章数列表； 分类字典； 分类集合； 友链； github地址； 图标； 站点介绍
     return render(request, 'index.html', context={'articles': articles,
-                                                  'article_num': article_num,
-                                                  'article_num_list': article_num_list,
-                                                  'categories_dict': categories_dict,
-                                                  'categories': categories,
-                                                  'friends_addr_list': friends_addr_list,
-                                                  'github_addr': github_addr,
-                                                  'icon':icon,
-                                                  'site_desc': site_desc
-                                                  })
+                                                      'article_num': article_num,
+                                                      'article_num_list': article_num_list,
+                                                      'categories_dict': categories_dict,
+                                                      'categories': categories,
+                                                      'friends_addr_list': friends_addr_list,
+                                                      'github_addr': github_addr,
+                                                      'icon': icon,
+                                                      'site_desc': site_desc
+                                                      })
+
 
 
 # 注册
@@ -282,7 +287,7 @@ def user_center(request, user_name):
                                                     ], safe_mode=True, enable_attributes=False)
     github_addr = site_config.site_owner_github_addr
     icon = site_config.icon
-    articles = Article.objects.filter(author=1)
+    articles = Article.objects.filter(author__is_superuser=1)
     print(articles)
 
     data={
@@ -386,11 +391,55 @@ def test(request):
 
 # 引导页面
 def guide(request):
-    try:
-        users = UserProfile.objects.get(username='tom')
-        for user in users:
+    if request.method == 'GET':
+        try:
+            user = UserProfile.objects.get(is_superuser=1)
             print(user)
-    except Exception as e:
-        user = UserProfile.objects.create_superuser('jackson', '345862542@qq.com','1006')
-        user.save()
-    return HttpResponse(1)
+        except Exception as e:
+            # user = UserProfile.objects.create_superuser('jackson', '345862542@qq.com','1006')
+            # user.save()
+            print(e)
+            return render(request, 'guide_addsuperuser.html')
+    else:
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        super_user = UserProfile.objects.create_superuser(username, email, password)
+        super_user.save()
+        return redirect('app:add_config')
+
+
+def add_article(request):
+    return redirect('/xadmin/article/article/add/')
+
+
+def add_config(request):
+    if request.method == "GET":
+        return render(request, 'add_config.html')
+    elif request.method == "POST":
+        categories = request.POST.get('categories')
+        desc = request.POST.get('desc')
+        friends_addr = request.POST.get('friends_addr')
+        github_addr = request.POST.get('github_addr')
+        print(categories)
+        print(desc)
+        print(friends_addr)
+        print(github_addr)
+        site_owner = UserProfile.objects.get(is_superuser=1)
+        site_owner_desc_short = desc
+        site_owner_desc = '# 这里空空如也，快去编辑吧'
+        site_owner_friends = friends_addr
+        site_owner_github_addr = github_addr
+
+        site_config = SiteConfig.objects.create(site_owner=site_owner,
+                                                site_owner_desc_short=site_owner_desc_short,
+                                                site_owner_desc=site_owner_desc,
+                                                site_owner_friends=site_owner_friends,
+                                                site_owner_github_addr=site_owner_github_addr)
+        site_config.save()
+
+        for category in categories.split(';'):
+            category_config = Categories.objects.create(name=category)
+            category_config.save()
+        # request.session['add_article']='<script>博客基础设置完毕，现在来编写第一篇文章吧</script>'
+        return redirect('app:edit_article')

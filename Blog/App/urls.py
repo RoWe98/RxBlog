@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^search/', views.search, name='search'),
     url(r'test/', views.test, name='test'),
     url(r'^guide/', views.guide, name='guide'),
+    url(r'^add_article/', views.add_article,name='edit_article'),
+    url(r'^add_config/', views.add_config, name='add_config'),
 ]

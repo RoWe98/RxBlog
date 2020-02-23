@@ -1,13 +1,14 @@
 {% extends 'xadmin/base.html' %}
 {% load i18n xadmin_tags %}
-{% block title %}{{ title }} | {{ site_title }}{% endblock %}
+{% block title %}{{ title }} | {{ site_title }}
+{% endblock %}
 
 {% block body %}
   <!-- Header -->
   {% block top-nav %}
   <div id="top-nav" class="navbar navbar-xs navbar-inverse navbar-fixed-top">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">{% block branding %}{{ site_title }}{% endblock %}</a>
+      <a class="navbar-brand" href="{% url 'app:index' %}">{% block branding %}{{ site_title }}{% endblock %}</a>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav pull-right">

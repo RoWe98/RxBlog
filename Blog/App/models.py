@@ -25,7 +25,7 @@ class SiteConfig(models.Model):
 
     site_owner_friends = models.TextField(help_text='友链的地址,使用;隔开', verbose_name='友链地址')
     site_owner_github_addr = models.URLField(verbose_name='github地址')
-    icon = models.ImageField(upload_to='', verbose_name='头像')
+    icon = models.ImageField(upload_to='', verbose_name='头像', default='user_icon.png')
 
     class Meta:
         db_table='site_config'
