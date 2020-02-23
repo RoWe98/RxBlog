@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block mycss %}
+     <style>
+        body {
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uAb9A.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uEIK0.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uVkPH.png');111111#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uV6Q1.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uZjnx.png');#}
+            {#background: url('https://s2.ax1x.com/2020/02/21/3uMU1g.png');#}
+            background: url('https://s2.ax1x.com/2020/02/21/3uUIh9.png');
+            {#background-size: 50% 50%;#}
 
+        }
+    </style>
+{% endblock %}
 {% block content %}
 <aside>
     <div class="l_box" id="stickMe">
@@ -16,7 +30,7 @@
         </form>
       </div>
 
-      <div class="fenlei">
+      <div class="fenlei"  style="background: rgb(255,255,255,0.9)">
         <h2>文章分类</h2>
         <ul>
           {% for category,num in categories_dict.items %}
@@ -26,7 +40,7 @@
         </ul>
       </div>
 
-      <div class="tuijian">
+      <div class="tuijian"  style="background: rgb(255,255,255,0.9)">
         <h2>站长推荐</h2>
         <ul>
           <li><a href="/">你是什么人便会遇上什么人</a></li>
