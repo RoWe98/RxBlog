@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^articles_list/(\w*)', views.article_list, name='article_list'),
     url(r'^edit/', views.edit, name='edit'),
     url(r'^search/', views.search, name='search'),
-    url(r'test/', views.test, name='test')
+    url(r'test/', views.test, name='test'),
+    url(r'^guide/', views.guide, name='guide'),
 ]

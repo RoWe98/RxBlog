@@ -382,3 +382,15 @@ def search(request):
 
 def test(request):
     return render(request, 'login_2.html')
+
+
+# 引导页面
+def guide(request):
+    try:
+        users = UserProfile.objects.get(username='tom')
+        for user in users:
+            print(user)
+    except Exception as e:
+        user = UserProfile.objects.create_superuser('jackson', '345862542@qq.com','1006')
+        user.save()
+    return HttpResponse(1)
