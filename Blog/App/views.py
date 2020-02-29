@@ -355,12 +355,14 @@ def article_list(request, categorie_name):
     print(type(category_id))
     print(categorie_name)
     articles = Article.objects.filter(categories=category_id)
+    articles_click = Article.objects.all().order_by('-click_num')
     print(articles)
     categories_dict, categories = get_categories()
     data = {
         "articles": articles,
         "categorie_name": categorie_name,
         'categories_dict': categories_dict,
+        'article_click': articles_click,
     }
     return render(request, 'articlelist.html', context=data)
 
