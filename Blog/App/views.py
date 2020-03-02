@@ -371,7 +371,7 @@ def edit(request):
     return redirect('/xadmin/')
 
 
-#
+# 查找页面
 def search(request):
     article_title = request.POST.get("keyboard")
     print(article_title)
@@ -411,10 +411,12 @@ def guide(request):
         return redirect('app:add_config')
 
 
+
+# 添加新文章
 def add_article(request):
     return redirect('/xadmin/article/article/add/')
 
-
+# 添加配置
 def add_config(request):
     if request.method == "GET":
         return render(request, 'add_config.html')
