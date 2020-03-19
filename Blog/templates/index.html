@@ -48,7 +48,7 @@
       <div class="tuijian" style="background: rgb(255,255,255,0.9)">
         <h2>点击排行</h2>
         <ul>
-          {% for article in articles %}
+          {% for article in article_click %}
             <li><a href="{% url 'app:post' article.id %}">{{ article.title }}</a> </li>
           {% endfor %}
         </ul>

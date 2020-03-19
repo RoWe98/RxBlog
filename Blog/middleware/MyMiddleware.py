@@ -13,4 +13,6 @@ class MiddleWare1(MiddlewareMixin):
             print(request.user)
             if not request.user.is_authenticated:
                 return redirect(reverse('app:login'))
+            else:
+                pass
 

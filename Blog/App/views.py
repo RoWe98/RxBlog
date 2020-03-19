@@ -68,6 +68,7 @@ def index(request):
     # 获取文章数
     article_num = Article.objects.count()
 
+    article_click = Article.objects.all().order_by('-click_num')[:5]
     article_num_list = []
     for i in range(10 - article_num):
         article_num_list.append('')
@@ -86,7 +87,8 @@ def index(request):
                                                       'friends_addr_list': friends_addr_list,
                                                       'github_addr': github_addr,
                                                       'icon': icon,
-                                                      'site_desc': site_desc
+                                                      'site_desc': site_desc,
+                                                      'article_click': article_click,
                                                       })
 
 
@@ -309,7 +311,7 @@ def user_center(request, user_name):
 # render传入值：
 # 文章集合， 当前分类的文章， 分类字典（格式{‘分类名’：‘当前分类文章数’}）， 分类
 def post(request, article_id):
-    articles = Article.objects.all().order_by('-click_num')
+    articles = Article.objects.all().order_by('-click_num')[:5]
 
     article = Article.objects.filter(pk=article_id).first()
     categories_article = Categories.objects.filter(article=article_id).first()
@@ -378,11 +380,13 @@ def search(request):
     articles = Article.objects.filter(title__contains=article_title)
     print(articles)
 
+    articles_click = Article.objects.all().order_by('-click_num')[:5]
     categories_dict, categories = get_categories()
 
     data={
         "articles": articles,
         'categories_dict': categories_dict,
+        'articles_click': articles_click,
     }
     return render(request, 'articlelist.html', context=data)
 
