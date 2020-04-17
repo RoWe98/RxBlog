@@ -20,9 +20,10 @@
     <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
     <script type="text/javascript" src="{% static 'js/prettify.js'%}"></script>
     <script type="text/javascript" src="{% static 'js/shCore.js' %}"></script>
+<!--    <script type="text/javascript" src="{% static 'js/hc-sticky.js' %}"></script>-->
+<!--    <script type="text/javascript" src="{% static 'js/comm.js' %}"></script>-->
     {% block myjs %}
     {% endblock %}
-    <script type="text/javascript" src="{% static 'js/comm.js' %}"></script>
     <!--[if lt IE 9]>
     <script src="{% static 'js/modernizr.js' %}"></script>
     <![endif]-->
@@ -59,6 +60,8 @@
   </footer>
   <a href="#" class="cd-top cd-is-visible">Top</a>
 {% block extra_footer %}
+{% endblock %}
+{% block jscode %}
 {% endblock %}
 </body>
 </html>

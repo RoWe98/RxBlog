@@ -13,10 +13,10 @@ from django.core.mail import send_mail
 
 from App.models import UserProfile
 from Blog.settings import EMAIL_HOST_USER
-
+from Blog.settings import ALI_ACCESSKEY,ALI_ACCESSSECERT
 
 def send_message(phone_num):
-    client = AcsClient('LTAIfvsoSlsc3oPS', 'qsDSYRFuiovOWye4gtgRW3dHjZvUcb', 'cn-hangzhou')
+    client = AcsClient(ALI_ACCESSKEY, ALI_ACCESSSECERT, 'cn-hangzhou')
     request = CommonRequest()
     request.set_accept_format('json')
     request.set_domain('dysmsapi.aliyuncs.com')

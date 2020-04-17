@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'qiniustorage',
     'django_comments',
     'django.contrib.sites',
-    'dj_pagination'
+    'dj_pagination',
+    'taggit',
 ]
 
 SITE_ID = 1
@@ -156,6 +157,12 @@ DEFAUTLT_CHARSET = 'utf-8'
 
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# 阿里云Access
+
+ALI_ACCESSKEY='LTAIfvsoSlsc3oPS'
+ALI_ACCESSSECERT='qsDSYRFuiovOWye4gtgRW3dHjZvUcb'
 
 
 # 发送邮件设置

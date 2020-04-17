@@ -1,4 +1,5 @@
 pymysql
+django-taggit
 django==1.11.9
 aliyun-python-sdk-core
 django-simple-captcha

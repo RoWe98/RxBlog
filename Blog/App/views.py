@@ -1,10 +1,11 @@
 import markdown
+from taggit.models import Tag
 from captcha.helpers import captcha_image_url
 from captcha.models import CaptchaStore
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.mail import send_mail
-
+from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.forms import ModelForm
 from django.http import HttpResponse, JsonResponse
@@ -303,7 +304,19 @@ def user_center(request, user_name):
     print(user)
     return render(request, 'about.html', context=data)
 
-
+# 修改版markdown编辑
+def md(str_md=''):
+    '''
+    Renders the specified markdown content and embedded styles.
+    '''
+    str_html = ''
+    str_html = markdown.markdown(str_md, extensions=[
+        # 'urlize',
+        'markdown.extensions.extra',
+        'markdown.extensions.codehilite',
+        'markdown.extensions.toc',
+    ])
+    return str_html
 
 # 文章详情页面
 # 传入值: 文章主键
@@ -315,30 +328,65 @@ def post(request, article_id):
 
     article = Article.objects.filter(pk=article_id).first()
     categories_article = Categories.objects.filter(article=article_id).first()
-    print(article.content)
+    # print(article.content)
 
     # count click num
     article.click_num +=1
-    article.save(update_fields=['click_num'])
 
-    article.content = markdown.markdown(article.content.replace("\r\n", ' \n'),
-                                         extentions=[
-                                             'markdown.extensions.extra',
-                                             'markdown.extensions.codehilite',
-                                             'markdown.extensions.toc',
-                                         ], safe_mode=True, enable_attributes=False)
+    article.save(update_fields=['click_num'])
+    # print('分类')
+    # print(article.tags.all)
+
+    # 标签处理
+    print(article.tags.all())
+    tags = article.tags.all()
+    tag_list=[]
+    for tag in tags:
+        tag_list.append(tag.name)
+    print(tags)
+    print(tag_list)
+
+    Tags = Tag.objects.all()
+    print(Tags)
+    # article.content = markdown.markdown(article.content.replace("\r\n", ' \n'),
+    #                                      extentions=[
+    #                                          'markdown.extensions.extra',
+    #                                          'markdown.extensions.codehilite',
+    #                                          'markdown.extensions.toc',
+    #                                     ], safe_mode=True, enable_attributes=False)
+    article.content = md(article.content)
 
     print(article.content)
 
     categories_dict, categories = get_categories()
+
+    # 上一篇文章，下一篇文章
+    try:
+        pre_article = Article.objects.filter(pk__lt=article_id).order_by('-pk').first()
+    except:
+        pre_article = None
+
+    try:
+        next_article = Article.objects.filter(pk__gt=article_id).order_by('-pk').first()
+    except:
+        next_article = None
+    print(pre_article)
+    print(next_article)
+    print(type(tags))
+
 
     context = {'article': article,
                'articles': articles,
                'categories_article': categories_article,
                'categories_dict': categories_dict,
                'categories': categories,
+               'pre_article': pre_article,
+               'next_article': next_article,
+               'tags': tag_list,
+               'Tags': Tags
                }
     return render(request, 'info.html', context)
+
 
 
 # 上傳圖片到七牛雲
@@ -357,14 +405,14 @@ def article_list(request, categorie_name):
     print(type(category_id))
     print(categorie_name)
     articles = Article.objects.filter(categories=category_id)
-    articles_click = Article.objects.all().order_by('-click_num')
+    article_click = Article.objects.all().order_by('-click_num')[:5]
     print(articles)
     categories_dict, categories = get_categories()
     data = {
         "articles": articles,
         "categorie_name": categorie_name,
         'categories_dict': categories_dict,
-        'article_click': articles_click,
+        'article_click': article_click,
     }
     return render(request, 'articlelist.html', context=data)
 
@@ -380,13 +428,13 @@ def search(request):
     articles = Article.objects.filter(title__contains=article_title)
     print(articles)
 
-    articles_click = Article.objects.all().order_by('-click_num')[:5]
+    article_click = Article.objects.all().order_by('-click_num')[:5]
     categories_dict, categories = get_categories()
 
     data={
         "articles": articles,
         'categories_dict': categories_dict,
-        'articles_click': articles_click,
+        'article_click': article_click,
     }
     return render(request, 'articlelist.html', context=data)
 
@@ -451,3 +499,18 @@ def add_config(request):
             category_config.save()
         # request.session['add_article']='<script>博客基础设置完毕，现在来编写第一篇文章吧</script>'
         return redirect('app:edit_article')
+
+
+# 通过tag寻找文章
+def tag_list(request, tag_slug=None):
+    print(tag_slug)
+    articles = Article.objects.filter(tags__name__in=[tag_slug])
+    article_click = Article.objects.all().order_by('-click_num')[:5]
+    print(articles)
+    categories_dict, categories = get_categories()
+    data = {
+        "articles": articles,
+        'categories_dict': categories_dict,
+        'article_click': article_click,
+    }
+    return render(request, 'articlelist.html', context=data)

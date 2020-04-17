@@ -1,9 +1,9 @@
 $(document).ready(function () {
-	
-	
-	
-	var oH2 = document.getElementById("mnavh"); 
-	var oUl = document.getElementById("starlist");  
+
+
+
+	var oH2 = document.getElementById("mnavh");
+	var oUl = document.getElementById("starlist");
 	oH2.onclick = function ()
 	{
 		var style = oUl.style;
@@ -17,8 +17,8 @@ for(i=1;i<As.length;i++){if(window.location.href.indexOf(As[i].href)>=0)
 obj=As[i];}
 obj.id='selected';
 
-	
-  
+
+
 	var new_scroll_position = 0;
 	var last_scroll_position;
 	var header = document.getElementById("header");
@@ -41,9 +41,9 @@ obj.id='selected';
 
 	  new_scroll_position = last_scroll_position;
 	});
-	
-	
-	//»Øµ½¶¥²¿
+
+
+	//ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½
     // browser window scroll (in pixels) after which the "back to top" link is shown
     var offset = 300,
         //browser window scroll (in pixels) after which the "back to top" link opacity is reduced
@@ -69,16 +69,20 @@ obj.id='selected';
         );
     });
 	
-	//²àÀ¸¹Ì¶¨
+	ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½
 		   
 	    var Sticky = new hcSticky('aside', {
 	      stickTo: 'article',
 	      innerSticker: '#stickMe',
 	      queries: {
 	        980: {
-	          disable: true
+	          disable: false
 	        }
 	      }
 	    });
-	
+
 	});
+
+// var Sticky = new hcSticky('#aside', {
+//   stickTo: '#stickMe'
+// });

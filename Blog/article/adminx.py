@@ -1,7 +1,7 @@
 import xadmin
 from App.models import SiteConfig
 from article.models import Article, Categories
-
+from taggit.models import Tag
 
 class ArticleAdmin(object):
     list_display=['title', 'desc', 'click_num', 'categories', 'love_num', 'author', 'image']
@@ -12,3 +12,4 @@ class ArticleAdmin(object):
 xadmin.site.register(Article, ArticleAdmin)
 xadmin.site.register(Categories)
 xadmin.site.register(SiteConfig)
+xadmin.site.register(Tag)

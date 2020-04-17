@@ -2,7 +2,9 @@
 {% load staticfiles %}
 {% load comments %}
 {% block myjs %}
-<script type="text/javascript" src="{% static 'js/hc-sticky.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/hc-sticky.js' %}"></script>-->
+<!--    <script type="text/javascript" src="{% static 'js/hc-sticky.js' %}"></script>-->
+<!--    <script type="text/javascript" src="{% static 'js/comm.js' %}"></script>-->
 {% endblock %}
 {% block mycss %}
     <style>
@@ -13,7 +15,7 @@
             {#background: url('https://s2.ax1x.com/2020/02/21/3uV6Q1.png');#}
             {#background-size: 100% 100%;#}
             {#background: url('https://s2.ax1x.com/2020/02/21/3uZjnx.png')#}
-            background: url({% static 'images/bg.png'%});
+            background: url({% static 'images/bg3.jpg'%});
         }
     </style>
 {% endblock %}
@@ -21,6 +23,7 @@
     <article>
         <aside>
             <div class="l_box">
+
                 <div class="search">
                     <form action="{% url 'app:search'%}" method="post" name="searchform" id="searchform">
                       <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
@@ -49,9 +52,9 @@
                 <div class="cloud" style="background: rgb(255,255,255,0.9)">
                     <h2>标签云</h2>
                     <ul>
-                        <a href="/">陌上花开</a> <a href="/">校园生活</a> <a href="/">html5</a> <a href="/">SumSung</a> <a
-                            href="/">青春</a> <a href="/">温暖</a> <a href="/">阳光</a> <a href="/">三星</a><a href="/">索尼</a>
-                        <a href="/">华维荣耀</a> <a href="/">三星</a> <a href="/">索尼</a>
+                        {% for Tag in Tags%}
+                            <a href="/app/tags_list/{{Tag.name}}">{{Tag.name}}</a>
+                        {% endfor %}
                     </ul>
                 </div>
                  <div class="guanzhu" style="background: rgb(255,255,255,0.9)">
@@ -74,9 +77,9 @@
                     </ul>
                 </div>
                 <div class="tags">
-                    {#                    {% for categorie in categories %}#}
-                    {#                        <a href="/" target="_blank">{{ categorie.name }}</a>#}
-                    {#                    {% endfor %}#}
+                                        {% for tag in tags%}
+                                            <a href="/app/tags_list/{{tag}}" target="_blank">{{ tag }}</a>
+                                        {% endfor %}
                 </div>
                 <div class="news_about"><strong>简介</strong>{{ article.desc }}</div>
 
@@ -94,8 +97,16 @@
                 </p>
             </div>
             <div class="nextinfo">
-                <p>上一篇：<a href="/news/life/2018-03-13/804.html">作为一个设计师,如果遭到质疑你是否能恪守自己的原则?</a></p>
-                <p>下一篇：<a href="/news/life/">返回列表</a></p>
+                {% if pre_article %}
+                    {% if next_article %}
+                        <p>上一篇：<a href="/app/post/{{pre_article.id}}"> {{pre_article.title}} </a></p>
+                        <p>下一篇：<a href="/app/post/{{next_article.id}}"> {{next_article.title}} </a></p>
+                    {% else %}
+                        <p>上一篇：<a href=/app/post/{{pre_article.id}}"> {{pre_article.title}} </a></p>
+                    {% endif %}
+                {% else %}
+                    <p>下一篇：<a href="/app/post/{{next_article.id}}"> {{next_article.title}} </a></p>
+                {% endif %}
             </div>
             <div class="news_pl">
                 <h2>文章评论</h2>
@@ -160,5 +171,8 @@
             return false;
             });
         });
+
     </script>
 {% endblock %}
+
+

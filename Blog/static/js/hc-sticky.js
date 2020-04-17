@@ -1,263 +1,750 @@
 /*!
  * HC-Sticky
  * =========
- * Version: 2.1.0
+ * Version: 2.2.3
  * Author: Some Web Media
  * Author URL: http://somewebmedia.com
  * Plugin URL: https://github.com/somewebmedia/hc-sticky
  * Description: Cross-browser plugin that makes any element on your page visible while you scroll
  * License: MIT
  */
-!function (t, e) {
-    "use strict";
-    if ("object" == typeof module && "object" == typeof module.exports) {
-        if (!t.document) throw new Error("HC-Sticky requires a browser to run.");
-        module.exports = e(t)
-    } else "function" == typeof define && define.amd ? define("hcSticky", [], e(t)) : e(t)
-}("undefined" != typeof window ? window : this, function (t) {
-    "use strict";
-    var e = {
-        top: 0,
-        bottom: 0,
-        bottomEnd: 0,
-        innerTop: 0,
-        innerSticker: null,
-        stickyClass: "sticky",
-        stickTo: null,
-        followScroll: !0,
-        queries: null,
-        queryFlow: "down",
-        onStart: null,
-        onStop: null,
-        onBeforeResize: null,
-        onResize: null,
-        resizeDebounce: 100,
-        disable: !1
-    }, o = t.document, i = function (n, s) {
-        if ("string" == typeof n && (n = o.querySelector(n)), !n) return !1;
-        var r = {}, l = i.Helpers, a = n.parentNode;
-        "static" === l.getStyle(a, "position") && (a.style.position = "relative");
-        var c = function () {
-                var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
-                l.isEmptyObject(t) && r || (r = Object.assign({}, e, r, t))
-            }, f = function () {
-                return r.disable
-            }, d = function () {
-                if (r.queries) {
-                    var o = t.innerWidth, i = r.queryFlow, n = r.queries;
-                    if (function (t) {
-                        r = Object.assign({}, e, t || {})
-                    }(s), "up" === i) for (var a in n) o >= a && !l.isEmptyObject(n[a]) && c(n[a]); else {
-                        var f = [];
-                        for (var d in r.queries) {
-                            var u = {};
-                            u[d] = n[d], f.push(u)
-                        }
-                        for (var p = f.length - 1; p >= 0; p--) {
-                            var g = f[p], m = Object.keys(g)[0];
-                            o <= m && !l.isEmptyObject(g[m]) && c(g[m])
-                        }
-                    }
-                }
-            }, u = {
-                css: {}, position: null, stick: function () {
-                    var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
-                    l.hasClass(n, r.stickyClass) || (!1 === p.isAttached && p.attach(), u.position = "fixed", n.style.position = "fixed", n.style.left = p.offsetLeft + "px", n.style.width = p.width, void 0 === t.bottom ? n.style.bottom = "auto" : n.style.bottom = t.bottom + "px", void 0 === t.top ? n.style.top = "auto" : n.style.top = t.top + "px", n.classList ? n.classList.add(r.stickyClass) : n.className += " " + r.stickyClass, r.onStart && r.onStart.call(n, r))
-                }, reset: function () {
-                    var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
-                    if (t.disable = t.disable || !1, "fixed" === u.position || null === u.position || !(void 0 === t.top && void 0 === t.bottom || void 0 !== t.top && (parseInt(l.getStyle(n, "top")) || 0) === t.top || void 0 !== t.bottom && (parseInt(l.getStyle(n, "bottom")) || 0) === t.bottom)) {
-                        !0 === t.disable ? !0 === p.isAttached && p.detach() : !1 === p.isAttached && p.attach();
-                        var e = t.position || u.css.position;
-                        u.position = e, n.style.position = e, n.style.left = !0 === t.disable ? u.css.left : p.positionLeft + "px", n.style.width = "absolute" !== e ? u.css.width : p.width, void 0 === t.bottom ? n.style.bottom = !0 === t.disable ? "" : "auto" : n.style.bottom = t.bottom + "px", void 0 === t.top ? n.style.top = !0 === t.disable ? "" : "auto" : n.style.top = t.top + "px", n.classList ? n.classList.remove(r.stickyClass) : n.className = n.className.replace(new RegExp("(^|\\b)" + r.stickyClass.split(" ").join("|") + "(\\b|$)", "gi"), " "), r.onStop && r.onStop.call(n, r)
-                    }
-                }
-            }, p = {
-                el: o.createElement("div"),
-                offsetLeft: null,
-                positionLeft: null,
-                width: null,
-                isAttached: !1,
-                init: function () {
-                    for (var t in u.css) p.el.style[t] = u.css[t];
-                    var e = l.getStyle(n);
-                    p.offsetLeft = l.offset(n).left - (parseInt(e.marginLeft) || 0), p.positionLeft = l.position(n).left, p.width = l.getStyle(n, "width")
-                },
-                attach: function () {
-                    a.insertBefore(p.el, n.nextSibling), p.isAttached = !0
-                },
-                detach: function () {
-                    p.el = a.removeChild(p.el), p.isAttached = !1
-                }
-            }, g = void 0, m = void 0, v = void 0, h = void 0, y = void 0, b = void 0, S = void 0, w = void 0, k = void 0,
-            x = void 0, L = void 0, E = void 0, T = void 0, C = void 0, j = void 0, z = void 0, N = void 0, O = void 0,
-            R = function () {
-                u.css = function (t) {
-                    var e = l.getCascadedStyle(t), o = l.getStyle(t), i = {
-                        height: t.offsetHeight + "px",
-                        left: e.left,
-                        right: e.right,
-                        top: e.top,
-                        bottom: e.bottom,
-                        position: o.position,
-                        display: o.display,
-                        verticalAlign: o.verticalAlign,
-                        boxSizing: o.boxSizing,
-                        marginLeft: e.marginLeft,
-                        marginRight: e.marginRight,
-                        marginTop: e.marginTop,
-                        marginBottom: e.marginBottom,
-                        paddingLeft: e.paddingLeft,
-                        paddingRight: e.paddingRight
-                    };
-                    return e.float && (i.float = e.float || "none"), e.cssFloat && (i.cssFloat = e.cssFloat || "none"), o.MozBoxSizing && (i.MozBoxSizing = o.MozBoxSizing), i.width = "auto" !== e.width ? e.width : "border-box" === i.boxSizing || "border-box" === i.MozBoxSizing ? t.offsetWidth + "px" : o.width, i
-                }(n), p.init(), g = !(!r.stickTo || !("document" === r.stickTo || r.stickTo.nodeType && 9 === r.stickTo.nodeType || "object" == typeof r.stickTo && r.stickTo instanceof ("undefined" != typeof HTMLDocument ? HTMLDocument : Document))), m = r.stickTo ? g ? o : "string" == typeof r.stickTo ? o.querySelector(r.stickTo) : r.stickTo : a, j = (O = function () {
-                    var t = n.offsetHeight + (parseInt(u.css.marginTop) || 0) + (parseInt(u.css.marginBottom) || 0),
-                        e = (j || 0) - t;
-                    return e >= -1 && e <= 1 ? j : t
-                })(), h = (N = function () {
-                    return g ? Math.max(o.documentElement.clientHeight, o.body.scrollHeight, o.documentElement.scrollHeight, o.body.offsetHeight, o.documentElement.offsetHeight) : m.offsetHeight
-                })(), y = g ? 0 : l.offset(m).top, b = r.stickTo ? g ? 0 : l.offset(a).top : y, S = t.innerHeight, z = n.offsetTop - (parseInt(u.css.marginTop) || 0), v = r.innerSticker ? "string" == typeof r.innerSticker ? o.querySelector(r.innerSticker) : r.innerSticker : null, w = isNaN(r.top) && r.top.indexOf("%") > -1 ? parseFloat(r.top) / 100 * S : r.top, k = isNaN(r.bottom) && r.bottom.indexOf("%") > -1 ? parseFloat(r.bottom) / 100 * S : r.bottom, x = v ? v.offsetTop : r.innerTop ? r.innerTop : 0, L = isNaN(r.bottomEnd) && r.bottomEnd.indexOf("%") > -1 ? parseFloat(r.bottomEnd) / 100 * S : r.bottomEnd, E = y - w + x + z
-            }, H = t.pageYOffset || o.documentElement.scrollTop, B = 0, I = void 0, q = function () {
-                j = O(), h = N(), T = y + h - w - L, C = j > S;
-                var e = t.pageYOffset || o.documentElement.scrollTop, i = l.offset(n).top, s = i - e, c = void 0;
-                I = e < H ? "up" : "down", B = e - H, H = e, e > E ? T + w + (C ? k : 0) - (r.followScroll && C ? 0 : w) <= e + j - x - (j - x > S - (E - x) && r.followScroll && (c = j - S - x) > 0 ? c : 0) ? u.reset({
-                    position: "absolute",
-                    bottom: b + a.offsetHeight - T - w
-                }) : C && r.followScroll ? "down" === I ? s + j + k <= S ? u.stick({bottom: k}) : "fixed" === u.position && u.reset({
-                    position: "absolute",
-                    top: i - w - E - B + x
-                }) : s + x < 0 && "fixed" === u.position ? u.reset({
-                    position: "absolute",
-                    top: i - w - E + x - B
-                }) : i >= e + w - x && u.stick({top: w - x}) : u.stick({top: w - x}) : u.reset({disable: !0})
-            }, A = !1, F = !1, M = function () {
-                A && (l.event.unbind(t, "scroll", q), A = !1)
-            }, D = function () {
-                R(), j >= h ? M() : (q(), A || (l.event.bind(t, "scroll", q), A = !0))
-            }, W = function () {
-                n.style.position = "", n.style.left = "", n.style.top = "", n.style.bottom = "", n.style.width = "", n.classList ? n.classList.remove(r.stickyClass) : n.className = n.className.replace(new RegExp("(^|\\b)" + r.stickyClass.split(" ").join("|") + "(\\b|$)", "gi"), " "), u.css = {}, u.position = null, !0 === p.isAttached && p.detach()
-            }, P = function () {
-                W(), d(), f() ? M() : D()
-            }, V = function () {
-                r.onBeforeResize && r.onBeforeResize.call(n, r), P(), r.onResize && r.onResize.call(n, r)
-            }, Y = r.resizeDebounce ? l.debounce(V, r.resizeDebounce) : V, $ = function () {
-                F && (l.event.unbind(t, "resize", Y), F = !1), M()
-            }, Q = function () {
-                F || (l.event.bind(t, "resize", Y), F = !0), d(), f() ? M() : D()
-            };
-        this.options = function (t) {
-            return t ? r.option || null : Object.assign({}, r)
-        }, this.reinit = P, this.update = function (t) {
-            c(t), P()
-        }, this.attach = Q, this.detach = $, this.destroy = function () {
-            $(), W()
-        }, c(s), Q(), l.event.bind(t, "load", P)
-    };
-    if (void 0 !== t.jQuery) {
-        var n = t.jQuery;
-        n.fn.extend({
-            hcSticky: function (t) {
-                return this.length ? this.each(function () {
-                    var e = n.data(this, "hcSticky");
-                    e ? e.update(t) : (e = new i(this, t), n.data(this, "hcSticky", e))
-                }) : this
-            }
-        })
+
+(function(global, factory) {
+  'use strict';
+
+  if (typeof module === 'object' && typeof module.exports === 'object') {
+    if (global.document) {
+      module.exports = factory(global);
     }
-    return t.hcSticky = t.hcSticky || i, i
-}), function (t) {
-    "use strict";
-    var e = t.hcSticky, o = t.document;
-    "function" != typeof Object.assign && Object.defineProperty(Object, "assign", {
-        value: function (t, e) {
-            if (null == t) throw new TypeError("Cannot convert undefined or null to object");
-            for (var o = Object(t), i = 1; i < arguments.length; i++) {
-                var n = arguments[i];
-                if (null != n) for (var s in n) Object.prototype.hasOwnProperty.call(n, s) && (o[s] = n[s])
+    else {
+      throw new Error('HC-Sticky requires a browser to run.');
+    }
+  }
+  else if (typeof define === 'function' && define.amd) {
+    define('hcSticky', [], factory(global));
+  }
+  else {
+    factory(global);
+  }
+})(typeof window !== 'undefined' ? window : this, (window) => {
+  'use strict';
+
+  const DEFAULT_OPTIONS = {
+    top: 0,
+    bottom: 0,
+    bottomEnd: 0,
+    innerTop: 0,
+    innerSticker: null,
+    stickyClass: 'sticky',
+    stickTo: null,
+    followScroll: true,
+    responsive: null,
+    mobileFirst: false,
+    onStart: null,
+    onStop: null,
+    onBeforeResize: null,
+    onResize: null,
+    resizeDebounce: 100,
+    disable: false,
+
+    // deprecated
+    queries: null,
+    queryFlow: 'down'
+  };
+
+  const deprecated = (() => {
+    const pluginName = 'HC Sticky';
+
+    return (what, instead, type) => {
+      console.warn(
+        '%c' + pluginName + ':'
+        + '%c ' + type
+        + "%c '"+ what + "'"
+        + '%c is now deprecated and will be removed. Use'
+        + "%c '" + instead + "'"
+        + '%c instead.',
+        'color: #fa253b',
+        'color: default',
+        'color: #5595c6',
+        'color: default',
+        'color: #5595c6',
+        'color: default');
+    };
+  })();
+
+  const document = window.document;
+
+  const hcSticky = function(elem, userSettings = {}) {
+    // use querySeletor if string is passed
+    if (typeof elem === 'string') {
+      elem = document.querySelector(elem);
+    }
+
+    // check if element exist
+    if (!elem) {
+      return false;
+    }
+
+    if (userSettings.queries) {
+      deprecated('queries', 'responsive', 'option');
+    }
+
+    if (userSettings.queryFlow) {
+      deprecated('queryFlow', 'mobileFirst', 'option');
+    }
+
+    let STICKY_OPTIONS = {};
+    const Helpers = hcSticky.Helpers;
+    const elemParent = elem.parentNode;
+
+    // parent can't be static
+    if (Helpers.getStyle(elemParent, 'position') === 'static') {
+      elemParent.style.position = 'relative';
+    }
+
+    const setOptions = (options = {}) => {
+      if (Helpers.isEmptyObject(options) && !Helpers.isEmptyObject(STICKY_OPTIONS)) {
+        // nothing to set
+        return;
+      }
+
+      // extend options
+      STICKY_OPTIONS = Object.assign({}, DEFAULT_OPTIONS, STICKY_OPTIONS, options);
+    };
+
+    const resetOptions = (options) => {
+      STICKY_OPTIONS = Object.assign({}, DEFAULT_OPTIONS, options || {});
+    };
+
+    const getOptions = (option) => {
+      return option ? STICKY_OPTIONS[option] : Object.assign({}, STICKY_OPTIONS);
+    };
+
+    const isDisabled = () => {
+      return STICKY_OPTIONS.disable;
+    };
+
+    const applyQueries = () => {
+      const mediaQueries = STICKY_OPTIONS.responsive || STICKY_OPTIONS.queries;
+
+      if (mediaQueries) {
+        const window_width = window.innerWidth;
+
+        // reset settings
+        resetOptions(userSettings);
+
+        if (STICKY_OPTIONS.mobileFirst) {
+          for (const width in mediaQueries) {
+            if (window_width >= width && !Helpers.isEmptyObject(mediaQueries[width])) {
+              setOptions(mediaQueries[width]);
             }
-            return o
-        }, writable: !0, configurable: !0
-    });
-    var i = function () {
-        function e(e) {
-            var o = t.event;
-            return o.target = o.target || o.srcElement || e, o
+          }
+        }
+        else {
+          const queriesArr = [];
+
+          // convert to array so we can reverse loop it
+          for (const b in mediaQueries) {
+            const q = {};
+
+            q[b] = mediaQueries[b];
+            queriesArr.push(q);
+          }
+
+          for (let i = queriesArr.length - 1; i >= 0; i--) {
+            const query = queriesArr[i];
+            const breakpoint = Object.keys(query)[0];
+
+            if (window_width <= breakpoint && !Helpers.isEmptyObject(query[breakpoint])) {
+              setOptions(query[breakpoint]);
+            }
+          }
+        }
+      }
+    };
+
+    // our helper function for getting necessary styles
+    const getStickyCss = (el) => {
+      const cascadedStyle = Helpers.getCascadedStyle(el);
+      const computedStyle = Helpers.getStyle(el);
+
+      const css = {
+        height: el.offsetHeight + 'px',
+        left: cascadedStyle.left,
+        right: cascadedStyle.right,
+        top: cascadedStyle.top,
+        bottom: cascadedStyle.bottom,
+        position: computedStyle.position,
+        display: computedStyle.display,
+        verticalAlign: computedStyle.verticalAlign,
+        boxSizing: computedStyle.boxSizing,
+        marginLeft: cascadedStyle.marginLeft,
+        marginRight: cascadedStyle.marginRight,
+        marginTop: cascadedStyle.marginTop,
+        marginBottom: cascadedStyle.marginBottom,
+        paddingLeft: cascadedStyle.paddingLeft,
+        paddingRight: cascadedStyle.paddingRight
+      };
+
+      if (cascadedStyle['float']) {
+        css['float'] = cascadedStyle['float'] || 'none';
+      }
+
+      if (cascadedStyle.cssFloat) {
+        css['cssFloat'] = cascadedStyle.cssFloat || 'none';
+      }
+
+      // old firefox box-sizing
+      if (computedStyle.MozBoxSizing) {
+        css['MozBoxSizing'] = computedStyle.MozBoxSizing;
+      }
+
+      css['width'] = cascadedStyle.width !== 'auto' ? cascadedStyle.width : (css.boxSizing === 'border-box' || css.MozBoxSizing === 'border-box' ? el.offsetWidth + 'px' : computedStyle.width);
+
+      return css;
+    };
+
+    const Sticky = {
+      css: {},
+      position: null, // so we don't need to check css all the time
+      stick: (args = {}) => {
+        // check if element is already sticky
+        if (Helpers.hasClass(elem, STICKY_OPTIONS.stickyClass)) {
+          return;
         }
 
-        var i = o.documentElement, n = function () {
-        };
-        i.addEventListener ? n = function (t, e, o) {
-            t.addEventListener(e, o, !1)
-        } : i.attachEvent && (n = function (t, o, i) {
-            t[o + i] = i.handleEvent ? function () {
-                var o = e(t);
-                i.handleEvent.call(i, o)
-            } : function () {
-                var o = e(t);
-                i.call(t, o)
-            }, t.attachEvent("on" + o, t[o + i])
-        });
-        var s = function () {
-        };
-        return i.removeEventListener ? s = function (t, e, o) {
-            t.removeEventListener(e, o, !1)
-        } : i.detachEvent && (s = function (t, e, o) {
-            t.detachEvent("on" + e, t[e + o]);
-            try {
-                delete t[e + o]
-            } catch (i) {
-                t[e + o] = void 0
-            }
-        }), {bind: n, unbind: s}
-    }(), n = function (e, i) {
-        return t.getComputedStyle ? i ? o.defaultView.getComputedStyle(e, null).getPropertyValue(i) : o.defaultView.getComputedStyle(e, null) : e.currentStyle ? i ? e.currentStyle[i.replace(/-\w/g, function (t) {
-            return t.toUpperCase().replace("-", "")
-        })] : e.currentStyle : void 0
-    }, s = function (e) {
-        var i = e.getBoundingClientRect(), n = t.pageYOffset || o.documentElement.scrollTop,
-            s = t.pageXOffset || o.documentElement.scrollLeft;
-        return {top: i.top + n, left: i.left + s}
+        if (Spacer.isAttached === false) {
+          Spacer.attach();
+        }
+
+        Sticky.position = 'fixed';
+
+        // apply styles
+        elem.style.position = 'fixed';
+        elem.style.left = Spacer.offsetLeft + 'px';
+        elem.style.width = Spacer.width;
+
+        if (typeof args.bottom === 'undefined') {
+          elem.style.bottom = 'auto';
+        }
+        else {
+          elem.style.bottom = args.bottom + 'px';
+        }
+
+        if (typeof args.top === 'undefined') {
+          elem.style.top = 'auto';
+        }
+        else {
+          elem.style.top = args.top + 'px';
+        }
+
+        // add sticky class
+        if (elem.classList) {
+          elem.classList.add(STICKY_OPTIONS.stickyClass);
+        }
+        else {
+          elem.className += ' ' + STICKY_OPTIONS.stickyClass;
+        }
+
+        // fire 'start' event
+        if (STICKY_OPTIONS.onStart) {
+          STICKY_OPTIONS.onStart.call(elem, Object.assign({}, STICKY_OPTIONS));
+        }
+      },
+      release: (args = {}) => {
+        args.stop = args.stop || false;
+
+        // check if we've already done this
+        if (args.stop !== true && Sticky.position !== 'fixed' && Sticky.position !== null && (
+          (typeof args.top === 'undefined' && typeof args.bottom === 'undefined') ||
+          (typeof args.top !== 'undefined' && (parseInt(Helpers.getStyle(elem, 'top')) || 0) === args.top) ||
+          (typeof args.bottom !== 'undefined' && (parseInt(Helpers.getStyle(elem, 'bottom')) || 0) === args.bottom)
+        )) {
+          return;
+        }
+
+        if (args.stop === true) {
+          // remove spacer
+          if (Spacer.isAttached === true) {
+            Spacer.detach();
+          }
+        }
+        else {
+          // check spacer
+          if (Spacer.isAttached === false) {
+            Spacer.attach();
+          }
+        }
+
+        const position = args.position || Sticky.css.position;
+
+        // remember position
+        Sticky.position = position;
+
+        // apply styles
+        elem.style.position = position;
+        elem.style.left = args.stop === true ? Sticky.css.left : Spacer.positionLeft + 'px';
+        elem.style.width = position !== 'absolute' ? Sticky.css.width : Spacer.width;
+
+        if (typeof args.bottom === 'undefined') {
+          elem.style.bottom = args.stop === true ? '' : 'auto';
+        }
+        else {
+          elem.style.bottom = args.bottom + 'px';
+        }
+
+        if (typeof args.top === 'undefined') {
+          elem.style.top = args.stop === true ? '' : 'auto';
+        }
+        else {
+          elem.style.top = args.top + 'px';
+        }
+
+        // remove sticky class
+        if (elem.classList) {
+          elem.classList.remove(STICKY_OPTIONS.stickyClass);
+        }
+        else {
+          elem.className = elem.className.replace(new RegExp('(^|\\b)' + STICKY_OPTIONS.stickyClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
+
+        // fire 'stop' event
+        if (STICKY_OPTIONS.onStop) {
+          STICKY_OPTIONS.onStop.call(elem, Object.assign({}, STICKY_OPTIONS));
+        }
+      }
     };
-    e.Helpers = {
-        isEmptyObject: function (t) {
-            for (var e in t) return !1;
-            return !0
-        }, debounce: function (t, e, o) {
-            var i = void 0;
-            return function () {
-                var n = this, s = arguments, r = o && !i;
-                clearTimeout(i), i = setTimeout(function () {
-                    i = null, o || t.apply(n, s)
-                }, e), r && t.apply(n, s)
+
+    const Spacer = {
+      el: document.createElement('div'),
+      offsetLeft: null,
+      positionLeft: null,
+      width: null,
+      isAttached: false,
+      init: () => {
+        Spacer.el.className = 'sticky-spacer';
+
+        // copy styles from sticky element
+        for (const prop in Sticky.css) {
+          Spacer.el.style[prop] = Sticky.css[prop];
+        }
+
+        // just to be sure the spacer is behind everything
+        Spacer.el.style['z-index'] = '-1';
+
+        const elemStyle = Helpers.getStyle(elem);
+
+        // get spacer offset and position
+        Spacer.offsetLeft = Helpers.offset(elem).left - (parseInt(elemStyle.marginLeft) || 0);
+        Spacer.positionLeft = Helpers.position(elem).left;
+
+        // get spacer width
+        Spacer.width = Helpers.getStyle(elem, 'width');
+      },
+      attach: () => {
+        // insert spacer to DOM
+        elemParent.insertBefore(Spacer.el, elem);
+        Spacer.isAttached = true;
+      },
+      detach: () => {
+        // remove spacer from DOM
+        Spacer.el = elemParent.removeChild(Spacer.el);
+        Spacer.isAttached = false;
+      }
+    };
+
+    // define our private variables
+    let stickTo_document;
+    let container;
+    let inner_sticker;
+
+    let container_height;
+    let container_offsetTop;
+
+    let elemParent_offsetTop;
+
+    let window_height;
+
+    let options_top;
+    let options_bottom;
+
+    let stick_top;
+    let stick_bottom;
+
+    let top_limit;
+    let bottom_limit;
+
+    let largerSticky;
+    let sticky_height;
+    let sticky_offsetTop;
+
+    let calcContainerHeight;
+    let calcStickyHeight;
+
+    const calcSticky = () => {
+      // get/set element styles
+      Sticky.css = getStickyCss(elem);
+
+      // init or reinit spacer
+      Spacer.init();
+
+      // check if referring element is document
+      stickTo_document = STICKY_OPTIONS.stickTo && (STICKY_OPTIONS.stickTo === 'document'
+        || (STICKY_OPTIONS.stickTo.nodeType && STICKY_OPTIONS.stickTo.nodeType === 9)
+        || (typeof STICKY_OPTIONS.stickTo === 'object' && STICKY_OPTIONS.stickTo instanceof (typeof HTMLDocument !== 'undefined' ? HTMLDocument : Document)))
+      ? true : false;
+
+      // select referred container
+      container = STICKY_OPTIONS.stickTo
+        ? stickTo_document
+          ? document
+          : typeof STICKY_OPTIONS.stickTo === 'string'
+            ? document.querySelector(STICKY_OPTIONS.stickTo)
+            : STICKY_OPTIONS.stickTo
+        : elemParent;
+
+      // get sticky height
+      calcStickyHeight = () => {
+        const height = elem.offsetHeight + (parseInt(Sticky.css.marginTop) || 0) + (parseInt(Sticky.css.marginBottom) || 0);
+        const h_diff = (sticky_height || 0) - height;
+
+        if (h_diff >= -1 && h_diff <= 1) {
+          // sometimes element height changes by 1px when it get fixed position, so don't return new value
+          return sticky_height;
+        }
+        else {
+          return height;
+        }
+      };
+
+      sticky_height = calcStickyHeight();
+
+      // get container height
+      calcContainerHeight = () => {
+        return !stickTo_document ? container.offsetHeight : Math.max(document.documentElement.clientHeight, document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight);
+      };
+
+      container_height = calcContainerHeight();
+
+      container_offsetTop = !stickTo_document ? Helpers.offset(container).top : 0;
+      elemParent_offsetTop = !STICKY_OPTIONS.stickTo
+        ? container_offsetTop // parent is container
+        : !stickTo_document
+          ? Helpers.offset(elemParent).top
+          : 0;
+      window_height = window.innerHeight;
+      sticky_offsetTop = elem.offsetTop - (parseInt(Sticky.css.marginTop) || 0);
+
+      // get inner sticker element
+      inner_sticker = STICKY_OPTIONS.innerSticker
+        ? typeof STICKY_OPTIONS.innerSticker === 'string'
+          ? document.querySelector(STICKY_OPTIONS.innerSticker)
+          : STICKY_OPTIONS.innerSticker
+        : null;
+
+      // top
+      options_top = isNaN(STICKY_OPTIONS.top) && STICKY_OPTIONS.top.indexOf('%') > -1
+        ? (parseFloat(STICKY_OPTIONS.top) / 100) * window_height
+        : STICKY_OPTIONS.top;
+
+      // bottom
+      options_bottom = isNaN(STICKY_OPTIONS.bottom) && STICKY_OPTIONS.bottom.indexOf('%') > -1
+        ? (parseFloat(STICKY_OPTIONS.bottom) / 100) * window_height
+        : STICKY_OPTIONS.bottom;
+
+      // calculate sticky breakpoints
+      stick_top = inner_sticker
+        ? inner_sticker.offsetTop
+        : STICKY_OPTIONS.innerTop
+          ? STICKY_OPTIONS.innerTop
+          : 0;
+
+      stick_bottom = isNaN(STICKY_OPTIONS.bottomEnd) && STICKY_OPTIONS.bottomEnd.indexOf('%') > -1
+        ? (parseFloat(STICKY_OPTIONS.bottomEnd) / 100) * window_height
+        : STICKY_OPTIONS.bottomEnd;
+
+      top_limit = container_offsetTop - options_top + stick_top + sticky_offsetTop;
+    };
+
+    // store scroll position so we can determine scroll direction
+    let last_pos = window.pageYOffset || document.documentElement.scrollTop;
+    let diff_y = 0;
+    let scroll_dir;
+
+    const runSticky = () => {
+      // always calculate sticky and container height in case of DOM change
+      sticky_height = calcStickyHeight();
+      container_height = calcContainerHeight();
+
+      bottom_limit = container_offsetTop + container_height - options_top - stick_bottom;
+
+      // check if sticky is bigger than container
+      largerSticky = sticky_height > window_height;
+
+      const offset_top = window.pageYOffset || document.documentElement.scrollTop;
+      const sticky_top = Helpers.offset(elem).top;
+      const sticky_window_top = sticky_top - offset_top;
+      let bottom_distance;
+
+      // get scroll direction
+      scroll_dir = offset_top < last_pos ? 'up' : 'down';
+      diff_y = offset_top - last_pos;
+      last_pos = offset_top;
+
+      if (offset_top > top_limit) {
+        // http://geek-and-poke.com/geekandpoke/2012/7/27/simply-explained.html
+        if (bottom_limit + options_top + (largerSticky ? options_bottom : 0) - (STICKY_OPTIONS.followScroll && largerSticky ? 0 : options_top) <= offset_top + sticky_height - stick_top - ((sticky_height - stick_top > window_height - (top_limit - stick_top) && STICKY_OPTIONS.followScroll) ? (((bottom_distance = sticky_height - window_height - stick_top) > 0) ? bottom_distance : 0) : 0)) { // bottom reached end
+          Sticky.release({
+            position: 'absolute',
+            //top: bottom_limit - sticky_height - top_limit + stick_top + sticky_offsetTop
+            bottom: elemParent_offsetTop + elemParent.offsetHeight - bottom_limit - options_top
+          });
+        }
+        else if (largerSticky && STICKY_OPTIONS.followScroll) { // sticky is bigger than container and follows scroll
+          if (scroll_dir === 'down') { // scroll down
+            if (sticky_window_top + sticky_height + options_bottom <= window_height + .9) { // stick on bottom
+              // fix subpixel precision with adding .9 pixels
+              Sticky.stick({
+                //top: window_height - sticky_height - options_bottom
+                bottom: options_bottom
+              });
             }
-        }, hasClass: function (t, e) {
-            return t.classList ? t.classList.contains(e) : new RegExp("(^| )" + e + "( |$)", "gi").test(t.className)
-        }, offset: s, position: function (t) {
-            var e = t.offsetParent, o = s(e), i = s(t), r = n(e), l = n(t);
-            return o.top += parseInt(r.borderTopWidth) || 0, o.left += parseInt(r.borderLeftWidth) || 0, {
-                top: i.top - o.top - (parseInt(l.marginTop) || 0),
-                left: i.left - o.left - (parseInt(l.marginLeft) || 0)
+            else if (Sticky.position === 'fixed') { // bottom reached window bottom
+              Sticky.release({
+                position: 'absolute',
+                top: sticky_top - options_top - top_limit - diff_y + stick_top
+              });
             }
-        }, getStyle: n, getCascadedStyle: function (e) {
-            var i = e.cloneNode(!0);
-            i.style.display = "none", e.parentNode.insertBefore(i, e.nextSibling);
-            var n = void 0;
-            i.currentStyle ? n = i.currentStyle : t.getComputedStyle && (n = o.defaultView.getComputedStyle(i, null));
-            var s = {};
-            for (var r in n) !isNaN(r) || "string" != typeof n[r] && "number" != typeof n[r] || (s[r] = n[r]);
-            if (Object.keys(s).length < 3) {
-                s = {};
-                for (var l in n) isNaN(l) || (s[n[l].replace(/-\w/g, function (t) {
-                    return t.toUpperCase().replace("-", "")
-                })] = n.getPropertyValue(n[l]))
+          }
+          else { // scroll up
+            if (Math.ceil(sticky_window_top + stick_top) < 0 && Sticky.position === 'fixed') { // top reached window top
+              Sticky.release({
+                position: 'absolute',
+                top: sticky_top - options_top - top_limit + stick_top - diff_y
+              });
             }
-            if (s.margin || "auto" !== s.marginLeft ? s.margin || s.marginLeft !== s.marginRight || s.marginLeft !== s.marginTop || s.marginLeft !== s.marginBottom || (s.margin = s.marginLeft) : s.margin = "auto", !s.margin && "0px" === s.marginLeft && "0px" === s.marginRight) {
-                var a = e.offsetLeft - e.parentNode.offsetLeft,
-                    c = a - (parseInt(s.left) || 0) - (parseInt(s.right) || 0),
-                    f = e.parentNode.offsetWidth - e.offsetWidth - a - (parseInt(s.right) || 0) + (parseInt(s.left) || 0) - c;
-                0 !== f && 1 !== f || (s.margin = "auto")
+            else if (sticky_top >= offset_top + options_top - stick_top) { // stick on top
+              Sticky.stick({
+                top: options_top - stick_top
+              });
             }
-            return i.parentNode.removeChild(i), i = null, s
-        }, event: i
-    }
-}(window);
+          }
+        }
+        else { // stick on top
+          Sticky.stick({
+            top: options_top - stick_top
+          });
+        }
+      }
+      else { // starting point
+        Sticky.release({
+          stop: true
+        });
+      }
+    };
+
+    let scrollAttached = false;
+    let resizeAttached = false;
+
+    const disableSticky = () => {
+      if (scrollAttached) {
+        // detach sticky from scroll
+        Helpers.event.unbind(window, 'scroll', runSticky);
+
+        // sticky is not attached to scroll anymore
+        scrollAttached = false;
+      }
+    };
+
+    const initSticky = () => {
+      // check if element or it's parents are visible
+      if (elem.offsetParent === null || Helpers.getStyle(elem, 'display') === 'none') {
+        disableSticky();
+        return;
+      }
+
+      // calculate stuff
+      calcSticky();
+
+      // check if sticky is bigger than reffering container
+      if (sticky_height > container_height) {
+        disableSticky();
+        return;
+      }
+
+      // run
+      runSticky();
+
+      if (!scrollAttached) {
+        // attach sticky to scroll
+        Helpers.event.bind(window, 'scroll', runSticky);
+
+        // sticky is attached to scroll
+        scrollAttached = true;
+      }
+    };
+
+    const resetSticky = () => {
+      // remove inline styles
+      elem.style.position = '';
+      elem.style.left = '';
+      elem.style.top = '';
+      elem.style.bottom = '';
+      elem.style.width = '';
+
+      // remove sticky class
+      if (elem.classList) {
+        elem.classList.remove(STICKY_OPTIONS.stickyClass);
+      }
+      else {
+        elem.className = elem.className.replace(new RegExp('(^|\\b)' + STICKY_OPTIONS.stickyClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      }
+
+      // reset sticky object data
+      Sticky.css = {};
+      Sticky.position = null;
+
+      // remove spacer
+      if (Spacer.isAttached === true) {
+        Spacer.detach();
+      }
+    };
+
+    const reinitSticky = () => {
+      resetSticky();
+      applyQueries();
+
+      if (isDisabled()) {
+        disableSticky();
+        return;
+      }
+
+      // restart sticky
+      initSticky();
+    };
+
+    const resizeSticky = () => {
+      // fire 'beforeResize' event
+      if (STICKY_OPTIONS.onBeforeResize) {
+        STICKY_OPTIONS.onBeforeResize.call(elem, Object.assign({}, STICKY_OPTIONS));
+      }
+
+      // reinit sticky
+      reinitSticky();
+
+      // fire 'resize' event
+      if (STICKY_OPTIONS.onResize) {
+        STICKY_OPTIONS.onResize.call(elem, Object.assign({}, STICKY_OPTIONS));
+      }
+    };
+
+    const resize_cb = !STICKY_OPTIONS.resizeDebounce ? resizeSticky : Helpers.debounce(resizeSticky, STICKY_OPTIONS.resizeDebounce);
+
+    // Method for updating options
+    const Update = (options) => {
+      setOptions(options);
+
+      // also update user settings
+      userSettings = Object.assign({}, userSettings, options || {});
+
+      reinitSticky();
+    };
+
+    const Detach = () => {
+      // detach resize reinit
+      if (resizeAttached) {
+        Helpers.event.unbind(window, 'resize', resize_cb);
+        resizeAttached = false;
+      }
+
+      disableSticky();
+    };
+
+    const Destroy = () => {
+      Detach();
+      resetSticky();
+    };
+
+    const Attach = () => {
+      // attach resize reinit
+      if (!resizeAttached) {
+        Helpers.event.bind(window, 'resize', resize_cb);
+        resizeAttached = true;
+      }
+
+      applyQueries();
+
+      if (isDisabled()) {
+        disableSticky();
+        return;
+      }
+
+      initSticky();
+    };
+
+    this.options = getOptions;
+    this.refresh = reinitSticky;
+    this.update = Update;
+    this.attach = Attach;
+    this.detach = Detach;
+    this.destroy = Destroy;
+
+    // jQuery methods
+    this.triggerMethod = (method, options) => {
+      if (typeof this[method] === 'function') {
+        this[method](options);
+      }
+    };
+
+    this.reinit = () => {
+      deprecated('reinit', 'refresh', 'method');
+      reinitSticky();
+    };
+
+    // init settings
+    setOptions(userSettings);
+
+    // start sticky
+    Attach();
+
+    // reinit on complete page load
+    Helpers.event.bind(window, 'load', reinitSticky);
+  };
+
+  // jQuery Plugin
+  if (typeof window.jQuery !== 'undefined') {
+    const $ = window.jQuery;
+    const namespace = 'hcSticky';
+
+    $.fn.extend({
+      hcSticky: function(args, update) {
+        // check if selected element exist
+        if (!this.length) return this;
+
+        // we need to return options
+        if (args === 'options') {
+          return $.data(this.get(0), namespace).options();
+        }
+
+        return this.each(function() {
+          let instance = $.data(this, namespace);
+
+          if (instance) {
+            // already created, trigger method
+            instance.triggerMethod(args, update);
+          }
+          else {
+            // create new instance
+            instance = new hcSticky(this, args);
+            $.data(this, namespace, instance);
+          }
+        });
+      }
+    });
+  }
+
+  // browser global
+  window.hcSticky = window.hcSticky || hcSticky;
+
+  return hcSticky;
+});

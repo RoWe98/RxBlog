@@ -9,7 +9,7 @@
             {#background: url('https://s2.ax1x.com/2020/02/21/3uV6Q1.png');#}
             {#background: url('https://s2.ax1x.com/2020/02/21/3uZjnx.png');#}
             {#background: url('https://s2.ax1x.com/2020/02/21/3uMU1g.png');#}
-            background: url({% static 'images/bg.png'%});
+            background: url({% static 'images/bg3.jpg'%});
             {#background-size: 50% 50%;#}
 
         }
@@ -43,7 +43,7 @@
       <div class="tuijian" style="background: rgb(255,255,255,0.9)">
         <h2>点击排行</h2>
         <ul>
-          {% for article in articles_click %}
+          {% for article in article_click %}
                 <li><a href="{% url 'app:post' article.id %}">{{ article.title }}</a> </li>
           {% endfor %}
         </ul>

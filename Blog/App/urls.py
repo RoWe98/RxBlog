@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^guide/', views.guide, name='guide'),
     url(r'^add_article/', views.add_article,name='edit_article'),
     url(r'^add_config/', views.add_config, name='add_config'),
+    url(r'^tags_list/(?P<tag_slug>[-\w]+)/$', views.tag_list, name='tag_list'),
 ]
